@@ -6,7 +6,8 @@ from telegram.ext import Updater
 
 # Base bot class. Used for saving context etc.
 class Bot:
-    scheduled_tasks = []
+    hourly_tasks = []
+    daily_tasks = []
     greetings = ["hey", "hello", "hi"]
     context = {}
 
@@ -51,6 +52,5 @@ class Bot:
 
     def start_scheduled_scripts(self):
         self.scheduled_tasks = [ f for f in os.listdir("./scheduled") if isfile(join("./scheduled", f)) ]
-
         
 
