@@ -3,13 +3,14 @@ import importlib
 
 from os.path import isfile, join
 from telegram.ext import Updater
+from threading import Timer
 
 # Base bot class. Used for saving context etc.
 class Bot:
     hourly_tasks = []
     daily_tasks = []
     greetings = ["hey", "hello", "hi"]
-    context = {}
+    inventory = {}
 
     def __init__(self, name, token):
         self.updater = Updater(token)
@@ -50,7 +51,25 @@ class Bot:
 
         return reply
 
+    def run_hourly():
+        self.hourly_tasks = [ f for f in os.listdir("./scheduled/hourly") if "init" not in f ]
+        for task in hourly_tasks:
+            fun = importlib.import_module("scheduled.hourly."+task.strip(".py"))
+            notification = fun.run()
+            self.updater.send_message(notification)
+        Timer(3600, self.run_hourly).start()
+
+    def run_daily():
+        self.daily_tasks = [ f for f in os.listdir("./scheduled/daily") if "init" not in f ]
+        for task in daily_tasks:
+            fun = importlib.import_module("scheduled.daily."+task.strip(".py"))
+            notification = fun.run()
+            self.updater.send_message(notification)
+        Timer(86400, self.run_daily).start()
+        return ""
+
     def start_scheduled_scripts(self):
-        self.scheduled_tasks = [ f for f in os.listdir("./scheduled") if isfile(join("./scheduled", f)) ]
-        
+        self.run_hourly()
+        self.run_daily()
+
 
