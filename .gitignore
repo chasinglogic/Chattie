@@ -87,3 +87,7 @@ ENV/
 # Rope project settings
 .ropeproject
 *#*
+=======
+#Ipython Notebook
+.ipynb_checkpoints
+>>>>>>> 026b6d986bf20736767326c13141c5fde74b40aa
