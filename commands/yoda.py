@@ -9,4 +9,4 @@ def translate(msg):
         return "An unexpected error occured"
 
 def run(thorin, incoming):
-    return translate(incoming.message.text[incoming.message.text.index("yoda") + 1:])
+    return translate(incoming.message.text[incoming.message.text.index("yoda") + 5:])
