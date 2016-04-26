@@ -65,7 +65,7 @@ class Bot:
             print("3rd party command found...")
             reply += mod.run(self, incoming)
         except:
-            print("Unexpected error running command:", sys.exc_info()[0])
+            print("Unexpected error running command:", sys.exc_info()[1])
             if reply == "":
                 return "Sorry I don't know that trick."
 
