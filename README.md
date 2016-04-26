@@ -10,13 +10,14 @@ Because of the way the Telegram Bot API works his name will include the @ sign a
 comes after his name is the name of the command you want to run. I plan on adding "/" command support later but it's not there now.
 
 ### How do I add new commands?
-All you have to do is create a new python script in commands/ that has a function called run which takes two arguments, the first argument is the 
+All you have to do is create a new python script in commands/ that has a function called run which takes two arguments and returns a string, the first argument is the 
 bot itsself and the second is the incoming message object from the [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) 
 package. You can read all about that on their github page. If you need to store information you have two options, you can use file based storage as 
 you want though that can be a little hacky and makes your command less portable. The second method is to store it in the bots context field which 
 is just a normal pyton dict.
 
-tl;dr: Look at one of the existing commands, you must have a run(bot, incoming_message_object) function.
+tl;dr: Look at one of the existing commands, you must have a run(bot, incoming_message_object) -> String function.
+Thorin will send the -> String to the chat room as a message.
 
 ### How do I make my own bot using this?
 You can fork Thorin and rename the bot by editing thorin.py and at the bottom changing the constructor such that "@Thorin_Bot"
