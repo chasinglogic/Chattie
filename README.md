@@ -35,7 +35,13 @@ cd ~/bot
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
+python thorin.py
 ```
+
+Add the & sign to the end of the last command if you want to run thorin in the background (for example on a server you won't stay connected to.)
+
+When you add commands Thorin will pick them up when he's asked to perform them while running, this means that you don't need to restart Thorin to add 
+new commands. However if you edit an existing command Thorin won't reload it until you restart him.
 
 ### Why the name Thorin?
 I'm an alpha nerd and play Dungeons and Dragons, currently I'm playing a Dwarf Tempest Cleric in 5th edition named Thorin. 
