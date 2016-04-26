@@ -1,8 +1,11 @@
+#!/usr/bin/python
+
 import os
+import sys
 import importlib
 
 from os.path import isfile, join
-from telegram.ext import Updater
+from telegram.ext import Updater, MessageHandler
 from threading import Timer
 
 # Base bot class. Used for saving context etc.
@@ -13,22 +16,37 @@ class Bot:
     inventory = {}
 
     def __init__(self, name, token):
+        print("Booting systems...")
         self.updater = Updater(token)
-        self.dispatch = updater.dispatcher
-        self.name = name
-        self.dispatch.addTelegramMessageHandler(self.parse_message)
+        print("Using API Token: " + token + "...")
+        self.dispatch = self.updater.dispatcher
+        print("Prepping dispatcher...")
+        self.name = name.lower()
+        print("Hello my name is " + name + "...")
+        self.dispatch.addHandler(MessageHandler([], self.parse_message))
 
     def run(self):
-        self.start_scheduled_scripts()
+        # self.start_scheduled_scripts()
+        print("I am listening for messages...")
         self.updater.start_polling()
         self.updater.idle()
 
     def parse_message(self, bot, incoming):
-        if self.name in message:
-            split = incoming.message.text.split(" ")
+        print("Message received...")
+        print(incoming.message.text.lower())
+        print(self.name in incoming.message.text.lower())
+        if self.name in incoming.message.text.lower():
+            print("Someone is talking to me...")
+            split = incoming.message.text.lower().split(" ")
+            print("Parsed: ", split)
             # get the first word after our name as that will be the command always.
-            reply = self.run_command(split[split.index(self.name) + 1], incoming)
-            bot.sendMessage(incoming.message.chat_id, text=reply)
+            try:
+                reply = self.run_command(split[split.index(self.name) + 1], incoming)
+                print("Responding with " + reply + "...")
+                bot.sendMessage(incoming.message.chat_id, text=reply)
+            except:
+                print("Unexpected error:", sys.exc_info()[0])
+                bot.sendMessage(incoming.message.chat_id, text="Sorry I had an errorerrorerrorerror")
 
     def run_command(self, command, incoming):
         reply = ""
@@ -44,6 +62,7 @@ class Bot:
 
         try:
             command = importlib.import_module('commands.'+command)
+            print("3rd party command found...")
             reply += command.run(self, incoming)
         except:
             if reply == "":
@@ -51,25 +70,27 @@ class Bot:
 
         return reply
 
-    def run_hourly():
-        self.hourly_tasks = [ f for f in os.listdir("./scheduled/hourly") if "init" not in f ]
-        for task in hourly_tasks:
-            fun = importlib.import_module("scheduled.hourly."+task.strip(".py"))
-            notification = fun.run()
-            self.updater.send_message(notification)
-        Timer(3600, self.run_hourly).start()
+    # def run_hourly():
+    #     self.hourly_tasks = [ f for f in os.listdir("./scheduled/hourly") if "init" not in f ]
+    #     for task in hourly_tasks:
+    #         fun = importlib.import_module("scheduled.hourly."+task.strip(".py"))
+    #         notification = fun.run()
+    #         self.updater.send_message(notification)
+    #     Timer(3600, self.run_hourly).start()
 
-    def run_daily():
-        self.daily_tasks = [ f for f in os.listdir("./scheduled/daily") if "init" not in f ]
-        for task in daily_tasks:
-            fun = importlib.import_module("scheduled.daily."+task.strip(".py"))
-            notification = fun.run()
-            self.updater.send_message(notification)
-        Timer(86400, self.run_daily).start()
-        return ""
+    # def run_daily():
+    #     self.daily_tasks = [ f for f in os.listdir("./scheduled/daily") if "init" not in f ]
+    #     for task in daily_tasks:
+    #         fun = importlib.import_module("scheduled.daily."+task.strip(".py"))
+    #         notification = fun.run()
+    #         self.updater.send_message(notification)
+    #     Timer(86400, self.run_daily).start()
 
-    def start_scheduled_scripts(self):
-        self.run_hourly()
-        self.run_daily()
+    # def start_scheduled_scripts(self):
+    #     self.run_hourly()
+    #     self.run_daily()
 
 
+if __name__ == "__main__":
+    bot = Bot("@Thorin_Bot", os.getenv("TELEGRAM_API_TOKEN"))
+    bot.run()
