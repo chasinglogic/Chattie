@@ -61,10 +61,11 @@ class Bot:
     3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Law."""
 
         try:
-            command = importlib.import_module('commands.'+command)
+            mod = importlib.import_module('commands.'+command.replace(" ", "_"))
             print("3rd party command found...")
-            reply += command.run(self, incoming)
+            reply += mod.run(self, incoming)
         except:
+            print("Unexpected error running command:", sys.exc_info()[0])
             if reply == "":
                 return "Sorry I don't know that trick."
 
