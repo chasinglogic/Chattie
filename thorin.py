@@ -49,22 +49,13 @@ class Bot:
 
     def run_command(self, command, incoming):
         reply = ""
-
-        if "the rules" in incoming.message.text.lower():
-            reply += """The rules are: 
-    1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
-    2. A robot must obey orders given it by human beings except where such orders would conflict with the First Law.
-    3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Law."""
-
         try:
-            mod = importlib.import_module('commands.'+command.replace(" ", "_"))
-            print("3rd party command found...")
-            reply += mod.run(self, incoming)
+            mod = importlib.import_module('commands.'+command)
+            reply = mod.run(self, incoming)
         except:
             print("Unexpected error running command:", sys.exc_info()[1])
             if reply == "":
                 return "Sorry I don't know that trick."
-
         return reply
 
     # def run_hourly():
