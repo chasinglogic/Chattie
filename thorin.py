@@ -12,7 +12,6 @@ from threading import Timer
 class Bot:
     hourly_tasks = []
     daily_tasks = []
-    greetings = ["hey", "hello", "hi"]
     inventory = {}
 
     def __init__(self, name, token):
@@ -50,9 +49,6 @@ class Bot:
 
     def run_command(self, command, incoming):
         reply = ""
-
-        if any(greeting in incoming.message.text.lower() for greeting in self.greetings):
-            reply += "What's up bro?\n"
 
         if "the rules" in incoming.message.text.lower():
             reply += """The rules are: 
