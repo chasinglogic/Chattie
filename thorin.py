@@ -2,6 +2,7 @@
 
 import os
 import sys
+import json
 import importlib
 
 from os.path import isfile, join
@@ -23,12 +24,23 @@ class Bot:
         self.name = name.lower()
         print("Hello my name is " + name + "...")
         self.dispatch.addHandler(MessageHandler([], self.parse_message))
+        if isfile("./inventory.json"):
+            print("Loading my inventory from last time...")
+            self.__load_inventory()
 
     def run(self):
         # self.start_scheduled_scripts()
         print("I am listening for messages...")
         self.updater.start_polling()
         self.updater.idle()
+
+    def __load_inventory(self):
+        with open("./inventory.json", "r") as inv:
+            self.inventory = json.load(inv)
+
+    def save_inventory(self):
+        with open("./inventory.json", "w") as inv:
+            json.dump(self.inventory, inv)
 
     def parse_message(self, bot, incoming):
         print("Message received...")
