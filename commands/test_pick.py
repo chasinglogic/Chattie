@@ -3,7 +3,7 @@ import pick
 
 class PickTest(unittest.TestCase):
     def test_choose(self):
-        result = choose("@thorin_bot pick jason justin mat")
+        result = pick.choose("@thorin_bot pick jason justin mat")
         self.assertIn(result, ["jason", "justin", "mat"])
 
 if __name__ == "__main__":
