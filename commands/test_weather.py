@@ -11,5 +11,3 @@ class TestWeather(unittest.TestCase):
 
     def test_get_weather_zip(self):
         self.assertNotEqual("", weather.get_weather_zip("45202"))
-
-    def 
