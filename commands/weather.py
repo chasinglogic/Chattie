@@ -19,7 +19,7 @@ def get_weather_name(city):
         return "I can't find that city"
     if r.status_code > 300:
         return "Some unknown error occurred"
-    return r.json()['main']['temp'] + r.json()['weather'][0]['description']
+    return r.json()['main']['temp'] + " " + r.json()['weather'][0]['description']
 
 # api.openweathermap.org/data/2.5/weather?zip={zip code}
 def get_weather_zip(zipcode):
@@ -29,7 +29,7 @@ def get_weather_zip(zipcode):
         return "I can't find that city"
     if r.status_code > 300:
         return "Some unknown error occurred"
-    return r.json()['main']['temp'] + r.json()['weather'][0]['description']
+    return r.json()['main']['temp'] + " " + r.json()['weather'][0]['description']
 
 def run(thorin, incoming):
     split = incoming.message.text.split(" ")
