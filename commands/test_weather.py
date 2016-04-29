@@ -1,5 +1,5 @@
 import unittest
-import weather
+import commands.weather as weather
 
 class TestWeather(unittest.TestCase):
     def test_is_zip_code(self):

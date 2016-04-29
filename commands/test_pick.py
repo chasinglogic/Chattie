@@ -1,5 +1,5 @@
 import unittest
-import pick
+import commands.pick as pick
 
 class TestPick(unittest.TestCase):
     def test_choose(self):
