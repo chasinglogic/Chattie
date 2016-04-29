@@ -13,7 +13,7 @@ def is_zip_code(requested):
 # We make a call to:
 # api.openweathermap.org/data/2.5/weather?q={city name}
 def get_weather_name(city):
-    r = requests.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + API_KEY)
+    r = requests.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + API_KEY + "&units=imperial")
     print(r.json())
     if r.status_code == 404:
         return "I can't find that city"
@@ -23,7 +23,7 @@ def get_weather_name(city):
 
 # api.openweathermap.org/data/2.5/weather?zip={zip code}
 def get_weather_zip(zipcode):
-    r = requests.get("http://api.openweathermap.org/data/2.5/weather?zip=" + zipcode + "&APPID=" + API_KEY)
+    r = requests.get("http://api.openweathermap.org/data/2.5/weather?zip=" + zipcode + "&APPID=" + API_KEY + "&units=imperial")
     print(r.json())
     if r.status_code == 404:
         return "I can't find that city"
