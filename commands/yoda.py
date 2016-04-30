@@ -1,3 +1,4 @@
+import sys
 import requests
 
 # http://api.funtranslations.com/translate/yoda.json?text=
