@@ -6,6 +6,7 @@ def translate(msg):
     try:
         return r.json()['contents']['translated'].replace("  ", " ")
     except:
+        print(sys.exec_info()[1])
         return "An unexpected error occured"
 
 def run(thorin, incoming):
