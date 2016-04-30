@@ -1,5 +1,5 @@
 import unittest
-import weather
+import commands.weather as weather
 
 class TestWeather(unittest.TestCase):
     def test_is_zip_code(self):
@@ -11,5 +11,3 @@ class TestWeather(unittest.TestCase):
 
     def test_get_weather_zip(self):
         self.assertNotEqual("", weather.get_weather_zip("45202"))
-
-    def 

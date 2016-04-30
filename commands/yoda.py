@@ -4,7 +4,7 @@ import requests
 def translate(msg):
     r = requests.get("http://api.funtranslations.com/translate/yoda.json?text=" + msg)
     try:
-        return r.json()['contents']['translated']
+        return r.json()['contents']['translated'].replace("  ", " ")
     except:
         return "An unexpected error occured"
 

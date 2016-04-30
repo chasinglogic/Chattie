@@ -1,7 +1,7 @@
 import unittest
-import pick
+import commands.pick as pick
 
-class PickTest(unittest.TestCase):
+class TestPick(unittest.TestCase):
     def test_choose(self):
         result = pick.choose("@thorin_bot pick jason justin mat")
         self.assertIn(result, ["jason", "justin", "mat"])
