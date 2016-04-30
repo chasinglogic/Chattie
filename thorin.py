@@ -6,8 +6,7 @@ import json
 import importlib
 
 from os.path import isfile, join
-from telegram.ext import Updater, MessageHandler
-from threading import Timer
+from telegram.ext import Updater, MessageHandler, Message
 
 # Base bot class. Used for saving context etc.
 class Bot:
@@ -66,6 +65,22 @@ class Bot:
             if reply == "":
                 return "Sorry I don't know that trick."
         return reply
+
+# This is the bot to use for testing, it overrides methods with side effects to ease testing
+# just use the run_command method for testing
+class BotTest(Bot):
+    def __init__(self, name):
+        print("Booting systems...")
+        print("Prepping dispatcher...")
+        self.name = name.lower()
+        print("Hello my name is " + name + "...")
+        self.updater = Updater("")
+
+    def make_mock_message(msg):
+        message = Message(0, None, None, None, text=msg)
+        return message
+
+        
 
 if __name__ == "__main__":
     bot = Bot("@Thorin_Bot", os.getenv("THORIN_API_TOKEN"))
