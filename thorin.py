@@ -11,8 +11,6 @@ from threading import Timer
 
 # Base bot class. Used for saving context etc.
 class Bot:
-    hourly_tasks = []
-    daily_tasks = []
     inventory = {}
 
     def __init__(self, name, token):
@@ -34,6 +32,7 @@ class Bot:
         self.updater.start_polling()
         self.updater.idle()
 
+    # potentially destructive function so we attempt to privatize it
     def __load_inventory(self):
         with open("./inventory.json", "r") as inv:
             self.inventory = json.load(inv)
@@ -44,8 +43,6 @@ class Bot:
 
     def parse_message(self, bot, incoming):
         print("Message received...")
-        print(incoming.message.text.lower())
-        print(self.name in incoming.message.text.lower())
         if self.name in incoming.message.text.lower():
             print("Someone is talking to me...")
             split = incoming.message.text.lower().split(" ")
@@ -69,27 +66,6 @@ class Bot:
             if reply == "":
                 return "Sorry I don't know that trick."
         return reply
-
-    # def run_hourly():
-    #     self.hourly_tasks = [ f for f in os.listdir("./scheduled/hourly") if "init" not in f ]
-    #     for task in hourly_tasks:
-    #         fun = importlib.import_module("scheduled.hourly."+task.strip(".py"))
-    #         notification = fun.run()
-    #         self.updater.send_message(notification)
-    #     Timer(3600, self.run_hourly).start()
-
-    # def run_daily():
-    #     self.daily_tasks = [ f for f in os.listdir("./scheduled/daily") if "init" not in f ]
-    #     for task in daily_tasks:
-    #         fun = importlib.import_module("scheduled.daily."+task.strip(".py"))
-    #         notification = fun.run()
-    #         self.updater.send_message(notification)
-    #     Timer(86400, self.run_daily).start()
-
-    # def start_scheduled_scripts(self):
-    #     self.run_hourly()
-    #     self.run_daily()
-
 
 if __name__ == "__main__":
     bot = Bot("@Thorin_Bot", os.getenv("THORIN_API_TOKEN"))
