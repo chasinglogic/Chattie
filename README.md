@@ -47,3 +47,17 @@ new commands. However if you edit an existing command Thorin won't reload it unt
 ### Why the name Thorin?
 I'm an alpha nerd and play Dungeons and Dragons, currently I'm playing a Dwarf Tempest Cleric in 5th edition named Thorin. 
 I love Thorin and his name so that's how I named the bot. 
+
+### Contributing
+
+I love getting contributions, well I haven't gotten any yet but I'm sure that I'll love it!
+
+The only thing I ask that if adding a new command that you include a description of it and how to configure it in the PR 
+(using a module with it's on README would be da bomb, I'm working on this for my own commands now.) If you have an idea for 
+a command or how we can add multiple backends to Thorin let me know via a Github Issue! I'd love to use Thorin on other chat services.
+
+Open all PR's against the develop branch thanks!
+
+### License Info
+
+Thorin is distributed under the Apache 2.0 License
