@@ -3,4 +3,5 @@ import commands.yoda as yoda
 
 class TestYoda(unittest.TestCase):
     def test_translate(self):
-        self.assertEqual("Lame, justin is", yoda.translate("Justin is lame"))
+        self.assertIn(yoda.translate("Justin is lame"), 
+                ["Lame, justin is", "Sorry I can only translate 5 times per hour"])
