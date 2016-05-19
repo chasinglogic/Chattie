@@ -13,7 +13,7 @@ comes after his name is the name of the command you want to run. I plan on addin
 All you have to do is create a new python script in commands/ that has a function called run which takes two arguments and returns a string, the first argument is the 
 bot itsself and the second is the incoming message object from the [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) 
 package. You can read all about that on their github page. If you need to store information you have two options, you can use file based storage as 
-you want though that can be a little hacky and makes your command less portable. The second method is to store it in the bots context field which 
+you want though that can be a little hacky and makes your command less portable. The second method is to store it in the bots inventory field which 
 is just a normal pyton dict.
 
 tl;dr: Look at one of the existing commands, you must have a run(bot, incoming_message_object) -> String function.
@@ -47,3 +47,17 @@ new commands. However if you edit an existing command Thorin won't reload it unt
 ### Why the name Thorin?
 I'm an alpha nerd and play Dungeons and Dragons, currently I'm playing a Dwarf Tempest Cleric in 5th edition named Thorin. 
 I love Thorin and his name so that's how I named the bot. 
+
+### Contributing
+
+I love getting contributions, well I haven't gotten any yet but I'm sure that I'll love it!
+
+The only thing I ask that if adding a new command that you include a description of it and how to configure it in the PR 
+(using a module with it's on README would be da bomb, I'm working on this for my own commands now.) If you have an idea for 
+a command or how we can add multiple backends to Thorin let me know via a Github Issue! I'd love to use Thorin on other chat services.
+
+Open all PR's against the develop branch thanks!
+
+### License Info
+
+Thorin is distributed under the Apache 2.0 License

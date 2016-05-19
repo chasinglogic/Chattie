@@ -2,16 +2,14 @@
 
 import os
 import sys
+import json
 import importlib
 
 from os.path import isfile, join
-from telegram.ext import Updater, MessageHandler
-from threading import Timer
+from telegram.ext import Updater, MessageHandler, Message
 
 # Base bot class. Used for saving context etc.
 class Bot:
-    hourly_tasks = []
-    daily_tasks = []
     inventory = {}
 
     def __init__(self, name, token):
@@ -23,6 +21,9 @@ class Bot:
         self.name = name.lower()
         print("Hello my name is " + name + "...")
         self.dispatch.addHandler(MessageHandler([], self.parse_message))
+        if isfile("./inventory.json"):
+            print("Loading my inventory from last time...")
+            self.__load_inventory()
 
     def run(self):
         # self.start_scheduled_scripts()
@@ -30,10 +31,17 @@ class Bot:
         self.updater.start_polling()
         self.updater.idle()
 
+    # potentially destructive function so we attempt to privatize it
+    def __load_inventory(self):
+        with open("./inventory.json", "r") as inv:
+            self.inventory = json.load(inv)
+
+    def save_inventory(self):
+        with open("./inventory.json", "w") as inv:
+            json.dump(self.inventory, inv)
+
     def parse_message(self, bot, incoming):
         print("Message received...")
-        print(incoming.message.text.lower())
-        print(self.name in incoming.message.text.lower())
         if self.name in incoming.message.text.lower():
             print("Someone is talking to me...")
             split = incoming.message.text.lower().split(" ")
@@ -58,26 +66,21 @@ class Bot:
                 return "Sorry I don't know that trick."
         return reply
 
-    # def run_hourly():
-    #     self.hourly_tasks = [ f for f in os.listdir("./scheduled/hourly") if "init" not in f ]
-    #     for task in hourly_tasks:
-    #         fun = importlib.import_module("scheduled.hourly."+task.strip(".py"))
-    #         notification = fun.run()
-    #         self.updater.send_message(notification)
-    #     Timer(3600, self.run_hourly).start()
+# This is the bot to use for testing, it overrides methods with side effects to ease testing
+# just use the run_command method for testing
+class BotTest(Bot):
+    def __init__(self, name):
+        print("Booting systems...")
+        print("Prepping dispatcher...")
+        self.name = name.lower()
+        print("Hello my name is " + name + "...")
+        self.updater = Updater("")
 
-    # def run_daily():
-    #     self.daily_tasks = [ f for f in os.listdir("./scheduled/daily") if "init" not in f ]
-    #     for task in daily_tasks:
-    #         fun = importlib.import_module("scheduled.daily."+task.strip(".py"))
-    #         notification = fun.run()
-    #         self.updater.send_message(notification)
-    #     Timer(86400, self.run_daily).start()
+    def make_mock_message(msg):
+        message = Message(0, None, None, None, text=msg)
+        return message
 
-    # def start_scheduled_scripts(self):
-    #     self.run_hourly()
-    #     self.run_daily()
-
+        
 
 if __name__ == "__main__":
     bot = Bot("@Thorin_Bot", os.getenv("THORIN_API_TOKEN"))
