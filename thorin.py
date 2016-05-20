@@ -6,7 +6,7 @@ import json
 import importlib
 
 from os.path import isfile, join
-from telegram.ext import Updater, MessageHandler, Message
+from telegram.ext import Updater, MessageHandler
 
 # Base bot class. Used for saving context etc.
 class Bot:
