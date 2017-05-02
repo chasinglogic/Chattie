@@ -4,12 +4,12 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-thorinfile = os.path.join(os.path.dirname(__file__),
-                          'src', 'thorin', '__init__.py')
+chattiefile = os.path.join(os.path.dirname(__file__),
+                          'src', 'chattie', '__init__.py')
 
 # Thanks to SQLAlchemy:
 # https://github.com/zzzeek/sqlalchemy/blob/master/setup.py#L104
-with open(thorinfile) as stream:
+with open(chattiefile) as stream:
     __version__ = re.compile(
         r".*__version__ = '(.*?)'", re.S
     ).match(stream.read()).group(1)
@@ -35,39 +35,31 @@ def get_requirements(requirements_file='requirements.txt'):
 
 
 setup(
-    name='thorin',
-    description='A framework for making bots in Python.',
+    name='chattie',
+    description='A framework for making bots in Python. Inspired by Hubot',
     version=__version__,
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     author="""
 Mathew Robinson <mrobinson@praelatus.io>
     """,
-    download_url='https://github.com/chasinglogic/Thorin/releases',
+    download_url='https://github.com/chasinglogic/Chattie/releases',
     install_requires=get_requirements(),
     entry_points={
         'console_scripts': [
-            'thorin = thorin.cli:thorin'
+            'chattie = chattie.cli:chattie'
         ],
-        'thorin.plugins.tricks': [
-            'default_tricks = thorin.tricks',
+        'chattie.plugins.tricks': [
+            'default_tricks = chattie.tricks',
         ],
-        'thorin.plugins.connectors': [
-            'telegram_connector = thorin.connectors.telegram',
-            'terminal_connector = thorin.connectors.term'
+        'chattie.plugins.connectors': [
+            'telegram_connector = chattie.connectors.telegram',
+            'terminal_connector = chattie.connectors.term'
         ]
     },
     license='Apache2.0',
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
-        'Operating System :: Microsoft',
-        'Operating System :: POSIX :: Linux',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
-        'Topic :: Software Development :: Bug Tracking',
+        'Programming Language :: Python :: 3'
     ]
 )

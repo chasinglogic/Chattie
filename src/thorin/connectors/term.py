@@ -20,5 +20,5 @@ class Connector(object):
             self.parser(0, msg)
 
     def send_message(self, room_id, msg):
-        """Print Thorin's response."""
+        """Print Chattie's response."""
         print(msg)

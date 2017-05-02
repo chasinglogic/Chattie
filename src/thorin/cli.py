@@ -1,19 +1,19 @@
-"""The cli for the thorin command."""
+"""The cli for the chattie command."""
 
 import click
 
-from thorin.bot import Bot
-from thorin.plugins import get_connectors
-from thorin.plugins import get_commands
+from chattie.bot import Bot
+from chattie.plugins import get_connectors
+from chattie.plugins import get_commands
 
 
 @click.group()
-def thorin():
-    """Helpful commands for running a thorin bot."""
+def chattie():
+    """Helpful commands for running a chattie bot."""
     pass
 
 
-@thorin.command()
+@chattie.command()
 def connectors():
     """Show all installed connectors."""
     connectors = get_connectors()
@@ -21,7 +21,7 @@ def connectors():
         print(c.name)
 
 
-@thorin.command()
+@chattie.command()
 def commands():
     """Show all installed commands."""
     commands = get_commands()
@@ -29,13 +29,13 @@ def commands():
         print(c.name)
 
 
-@thorin.command()
+@chattie.command()
 @click.option('--name',
-              default='Thorin',
+              default='Chattie',
               help='The name of your bot.')
 @click.option('--connector',
               default=get_connectors()[0].name,
-              help='Which connector to use, see "thorin connectors"')
+              help='Which connector to use, see "chattie connectors"')
 def run(name, connector):
     """Run the bot.
 

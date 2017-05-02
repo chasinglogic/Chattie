@@ -32,6 +32,6 @@ class Connector(object):
         self.bots[str(room_id)].sendMessage(chat_id=room_id, text=msg)
 
     def parse_incoming(self, bot, incoming):
-        """Transform incoming telegram info into format Thorin can parse."""
+        """Transform incoming telegram info into format Chattie can parse."""
         self.bots[str(incoming.message.chat_id)] = bot
         self.parser(incoming.message.chat_id, incoming.message.text)

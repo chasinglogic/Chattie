@@ -1,4 +1,4 @@
-"""The default commands which come with Thorin."""
+"""The default commands which come with Chattie."""
 
 import requests
 import random
@@ -78,7 +78,7 @@ def build(bot, inc_msg):
         return "Build successfully started."
 
 
-WEATHER_API_KEY = getenv("THORIN_WEATHER_API_TOKEN")
+WEATHER_API_KEY = getenv("CHATTIE_WEATHER_API_TOKEN")
 
 
 def _is_zip_code(requested):
@@ -119,7 +119,7 @@ def _get_weather_zip(zipcode):
     return _format_resp(r.json())
 
 
-def weather(thorin, incoming):
+def weather(chattie, incoming):
     """Get the weather for a given city name or zip code."""
     city_or_zip = str(incoming[incoming.index("weather"):])
     if _is_zip_code(city_or_zip):

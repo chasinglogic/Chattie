@@ -15,10 +15,10 @@ class Bot(object):
 
         connector should be a module which contains a class named
         Connector that follows the appropriate interface. See
-        thorin.connectors for examples.
+        chattie.connectors for examples.
 
         command_pkgs should be a list of packages as returned by
-        get_commands() from thorin.plugins. (essentially as returned
+        get_commands() from chattie.plugins. (essentially as returned
         by the entry_points functions)
 
         A command package needs to have a global dict variable named
