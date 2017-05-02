@@ -15,25 +15,6 @@ with open(chattiefile) as stream:
     ).match(stream.read()).group(1)
 
 
-# Thanks to Pagure:
-# https://pagure.io/pagure/blog/master/f/setup.py
-def get_requirements(requirements_file='requirements.txt'):
-    """
-    Get the contents of a file listing the requirements.
-
-    Returns:
-        the list of requirements, or an empty list if
-        `requirements_file` could not be opened or read
-    :return type: list
-    """
-    with open(requirements_file) as f:
-        return [
-            line.rstrip().split('#')[0]
-            for line in f.readlines()
-            if not line.startswith('#')
-        ]
-
-
 setup(
     name='chattie',
     description='A framework for making bots in Python. Inspired by Hubot',
@@ -44,7 +25,11 @@ setup(
 Mathew Robinson <mrobinson@praelatus.io>
     """,
     download_url='https://github.com/chasinglogic/Chattie/releases',
-    install_requires=get_requirements(),
+    install_requires=[
+        'python-telegram-bot',
+        'requests',
+        'click'
+    ],
     entry_points={
         'console_scripts': [
             'chattie = chattie.cli:chattie'
