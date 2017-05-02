@@ -1,14 +1,8 @@
 """The primary Bot class which handles inventory and connections."""
 
-import sys
 import json
 
 from os.path import isfile
-
-
-def debug(bot, msg):
-    """A simple debug command for checking bot state."""
-    return str(bot.__dict__)
 
 
 class Bot(object):
@@ -42,7 +36,6 @@ class Bot(object):
             print("Loading my inventory from last time...")
             self.__load_inventory()
         self.commands = {}
-        self.commands['debug'] = debug
         for pkg in command_pkgs:
             loaded = pkg.load()
             self.commands.update(loaded.commands)
@@ -68,20 +61,20 @@ class Bot(object):
     def parse_message(self, room_id, msg):
         """Turn the message into an array and calls the requested command."""
         print("Message received...")
-        if self.name in msg:
+        if self.name.lower() in msg.lower():
             print("Someone is talking to me...")
             split = msg.split(" ")
             print("Parsed: ", split)
             # get the first word after our name as that will be the
             # command always.
             try:
-                cmd = self.commands.get(split[split.index(self.name) + 1])
-                print('cmd', cmd)
-                reply = cmd(self, split)
-                self.connector.send_message(room_id, reply)
-            except TypeError:
+                cmd_idx = split.index(self.name) + 1
+            except ValueError:
+                cmd_idx = split.index(self.name.lower()) + 1
+            cmd = self.commands.get(split[cmd_idx])
+            if cmd is None:
                 self.connector.send_message(room_id,
                                             'I don\'t know that trick.')
-            except:
-                print("Unexpected error:", sys.exc_info()[0])
-                self.connector.send_message(room_id, 'Unexpected error.')
+                return
+            reply = cmd(self, split)
+            self.connector.send_message(room_id, reply)
