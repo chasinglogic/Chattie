@@ -1,2 +1,3 @@
 python-telegram-bot
 requests
+click
