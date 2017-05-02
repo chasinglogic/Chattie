@@ -20,7 +20,7 @@ class Connector(object):
         self.updater = Updater(token=token)
         self.dispatcher = self.updater.dispatcher
         self.parser = parser
-        self.dispatcher.addHandler(MessageHandler([], self.parse_incoming))
+        self.dispatcher.add_handler(MessageHandler(None, self.parse_incoming))
 
     def listen(self):
         """Listen for messages."""
