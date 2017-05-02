@@ -3,6 +3,7 @@
 import click
 
 from chattie.bot import Bot
+from chattie.tricks import helpcmd
 from chattie.plugins import get_connectors
 from chattie.plugins import get_commands
 
@@ -24,9 +25,9 @@ def connectors():
 @chattie.command()
 def commands():
     """Show all installed commands."""
-    commands = get_commands()
-    for c in commands:
-        print(c.name)
+    import chattie.connectors.term as term
+    bot = Bot('Chattie', term, get_commands())
+    print(helpcmd(bot, ''))
 
 
 @chattie.command()
