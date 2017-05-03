@@ -1,8 +1,11 @@
 """The primary Bot class which handles inventory and connections."""
 
 import json
+import sys
+import os
 
 from os.path import isfile
+from os.path import exists
 
 
 class Bot(object):
@@ -37,11 +40,24 @@ class Bot(object):
         if isfile("./inventory.json"):
             print("Loading my inventory from last time...")
             self.__load_inventory()
+        self.handlers = handlers
         self.commands = {}
         for pkg in command_pkgs:
             loaded = pkg.load()
             self.commands.update(loaded.commands)
-        self.handlers = handlers
+
+        # Add current directory PYTHONPATH for dynamic imports.
+        sys.path.append(os.getcwd())
+
+        # Check if tricks exists and add it if so.
+        if exists('./tricks'):
+            import tricks
+            self.commands.update(tricks.commands)
+
+        # Look for local handlers
+        if exists('./handlers'):
+            import handlers
+            self.handlers += handlers.handlers
 
     def run(self):
         """Run the bot."""
