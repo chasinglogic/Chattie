@@ -99,3 +99,7 @@ def run(name, connector):
     print('comm', commands)
     bot = Bot(name, conn, commands)
     bot.run()
+
+
+if __name__ == '__main__':
+    chattie()
