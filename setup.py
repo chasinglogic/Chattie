@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 
 chattiefile = os.path.join(os.path.dirname(__file__),
-                          'src', 'chattie', '__init__.py')
+                           'src', 'chattie', '__init__.py')
 
 # Thanks to SQLAlchemy:
 # https://github.com/zzzeek/sqlalchemy/blob/master/setup.py#L104
