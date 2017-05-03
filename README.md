@@ -5,8 +5,14 @@ A Python bot framework inspired by Hubot.
 ## How do I make my own bot using this?
 
 First install chattie using `pip3 install chattie` you then will have
-access to the chattie which generates and runs bots. Next you can
-create a new bot
+access to the chattie cli which generates and runs bots. Next you can
+create a new bot using `chattie new my_bot_name` this will create a
+new directory with the bot name and generate a few files to help you
+get started!
+
+From there you can start by adding [tricks](#tricks)
+and [handlers](#handlers) or just running the bot with the default
+connectors!
 
 ## How do I add new tricks?
 
