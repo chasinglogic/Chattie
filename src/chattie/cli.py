@@ -1,6 +1,7 @@
 """The cli for the chattie command."""
 
 import click
+import os
 
 from chattie.bot import Bot
 from chattie.tricks import helpcmd
@@ -31,8 +32,30 @@ def commands():
 
 
 @chattie.command()
+@click.argument('bot_name')
+def new(bot_name):
+    """Create a new bot directory."""
+    os.mkdir(bot_name)
+    os.mkdir(os.path.join(bot_name, 'tricks'))
+    os.mkdir(os.path.join(bot_name, 'handlers'))
+
+    with open(os.path.join(bot_name, 'envfile'), 'w') as f:
+        f.write("""BOT_NAME=%s
+# Use this if you want to use Telegram
+# TELEGRAM_API_TOKEN='your token here'
+""")
+
+    with open(os.path.join(bot_name, 'README'), 'w') as f:
+        f.write("""
+How to use your new bot!
+
+First you can write new commands or 'tricks' in tricks
+""")
+
+
+@chattie.command()
 @click.option('--name',
-              default='Chattie',
+              default=os.getenv('BOT_NAME', 'Chattie'),
               help='The name of your bot.')
 @click.option('--connector',
               default=get_connectors()[0].name,
