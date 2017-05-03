@@ -5,8 +5,11 @@ import pkg_resources
 
 def get_connectors():
     """Find all connectors available on the system."""
-    return [v for v in
-            pkg_resources.iter_entry_points('chattie.plugins.connectors')]
+    entries = [v for v in
+               pkg_resources.iter_entry_points('chattie.plugins.connectors')]
+    if os.path.exists('./tricks'):
+        entries.append()
+    return entries
 
 
 def get_commands():
