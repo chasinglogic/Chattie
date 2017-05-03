@@ -10,7 +10,7 @@ class Bot(object):
 
     inventory = {}
 
-    def __init__(self, name, connector, command_pkgs):
+    def __init__(self, name, connector, command_pkgs, handlers=[]):
         """Initialize the bot.
 
         connector should be a module which contains a class named
@@ -27,6 +27,8 @@ class Bot(object):
         command. The command functions will be called with two
         arguments the first being the current instance of the Bot
         class the second will be an argv like array of the message.
+
+        See the examples directory for commands, connectors, and handlers
         """
         print("Booting systems...")
         self.name = name
@@ -39,11 +41,21 @@ class Bot(object):
         for pkg in command_pkgs:
             loaded = pkg.load()
             self.commands.update(loaded.commands)
+        self.handlers = handlers
 
     def run(self):
         """Run the bot."""
         print("I am listening for messages...")
         self.connector.listen()
+
+    def get(self, key):
+        """Get key from the inventory."""
+        return self.inventory[key]
+
+    def set(self, key, value):
+        """Save value in the inventory at key."""
+        self.inventory[key] = value
+        self.__save_inventory()
 
     def __load_inventory(self):
         """Load the inventory file from the filesystem.
@@ -53,8 +65,11 @@ class Bot(object):
         with open("./inventory.json", "r") as inv:
             self.inventory = json.load(inv)
 
-    def save_inventory(self):
-        """Save the inventory to the file system."""
+    def __save_inventory(self):
+        """Save the inventory to the file system.
+
+        Potentially destructive function so we attempt to privatize it.
+        """
         with open("./inventory.json", "w") as inv:
             json.dump(self.inventory, inv)
 
@@ -78,3 +93,9 @@ class Bot(object):
                 return
             reply = cmd(self, split)
             self.connector.send_message(room_id, reply)
+            return
+        # If no command then pass to handlers
+        for h in self.handlers:
+            reply = h(self, msg)
+            if reply:
+                self.send_message(room_id, reply)
