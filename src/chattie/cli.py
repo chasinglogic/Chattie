@@ -38,10 +38,14 @@ def new(bot_name):
     os.mkdir(bot_name)
     # Create the tricks directory
     os.mkdir(os.path.join(bot_name, 'tricks'))
-    open(os.path.join(bot_name, 'tricks', '__init__.py'), 'w').close()
+    open(os.path.join(bot_name, 'tricks', '__init__.py'), 'w').\
+        write("commands = {}").\
+        close()
     # Create the handlers directory
     os.mkdir(os.path.join(bot_name, 'handlers'))
-    open(os.path.join(bot_name, 'handlers', '__init__.py'), 'w').close()
+    open(os.path.join(bot_name, 'handlers', '__init__.py'), 'w').\
+        write("handlers = []").\
+        close()
 
     with open(os.path.join(bot_name, 'envfile'), 'w') as f:
         f.write("""BOT_NAME=%s
