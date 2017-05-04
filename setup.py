@@ -21,10 +21,9 @@ setup(
     version=__version__,
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    author="""
-Mathew Robinson <mrobinson@praelatus.io>
-    """,
-    download_url='https://github.com/chasinglogic/Chattie/releases',
+    author="Mathew Robinson",
+    author_email="mrobinson@praelatus.io",
+    download_url='https://github.com/chasinglogic/Chattie',
     install_requires=[
         'python-telegram-bot',
         'requests',
