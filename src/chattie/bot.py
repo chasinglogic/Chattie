@@ -8,7 +8,7 @@ from os.path import isfile
 from os.path import exists
 
 
-class Bot(object):
+class Bot:
     """Base Bot class, maintains state and parsing commands."""
 
     inventory = {}

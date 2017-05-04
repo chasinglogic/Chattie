@@ -6,7 +6,7 @@ from telegram.ext import Updater
 from telegram.ext import MessageHandler
 
 
-class Connector(object):
+class Connector:
     """Connector class for the Telegram bot API."""
 
     # Holds the bots for all given rooms
