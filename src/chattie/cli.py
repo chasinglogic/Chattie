@@ -38,19 +38,17 @@ def new(bot_name):
     os.mkdir(bot_name)
     # Create the tricks directory
     os.mkdir(os.path.join(bot_name, 'tricks'))
-    open(os.path.join(bot_name, 'tricks', '__init__.py'), 'w').\
-        write("commands = {}").\
-        close()
+    with open(os.path.join(bot_name, 'tricks', '__init__.py'), 'w') as f:
+        f.write("commands = {}")
     # Create the handlers directory
     os.mkdir(os.path.join(bot_name, 'handlers'))
-    open(os.path.join(bot_name, 'handlers', '__init__.py'), 'w').\
-        write("handlers = []").\
-        close()
+    with open(os.path.join(bot_name, 'handlers', '__init__.py'), 'w') as f:
+        f.write("handlers = []")
 
     with open(os.path.join(bot_name, 'envfile'), 'w') as f:
-        f.write("""BOT_NAME=%s
+        f.write("""export BOT_NAME=%s
 # Use this if you want to use Telegram
-# TELEGRAM_API_TOKEN='your token here'
+# export TELEGRAM_API_TOKEN='your token here'
         """ % bot_name)
 
     with open(os.path.join(bot_name, 'README'), 'w') as f:
