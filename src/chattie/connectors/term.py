@@ -1,7 +1,7 @@
 """A connector for the terminal. Useful for debugging."""
 
 
-class Connector(object):
+class Connector:
     """A connector for the terminal. Useful for debugging."""
 
     def __init__(self, parser):
