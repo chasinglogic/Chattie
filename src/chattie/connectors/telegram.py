@@ -1,4 +1,9 @@
-"""A connector for the Telegram bot API."""
+"""A connector for the Telegram bot API.
+
+This connector only requires the TELEGRAM_API_TOKEN environment
+variable is set. You can acquire a token and instructions for making
+your bot join rooms from here: https://core.telegram.org/bots
+"""
 
 import os
 
