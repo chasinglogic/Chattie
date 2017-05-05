@@ -116,7 +116,7 @@ bot? For example registered rooms for a given handler, to make this
 simple Chattie maintains an internal dictionary called
 `inventory`. You can always access this directly if you so desire (as
 you are passed the bots instance as the first argument). But even
-better is to use the `get` and `set` methods provided by Chappie this
+better is to use the `get` and `set` methods provided by Chattie this
 will auto save the inventory on updates. Chattie also auto loads the
 inventory from disk on start. Make sure whatever you're storing is
 JSON serializable by the stdlib json module. An example of inventory
