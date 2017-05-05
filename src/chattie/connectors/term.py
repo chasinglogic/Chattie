@@ -1,4 +1,7 @@
-"""A connector for the terminal. Useful for debugging."""
+"""A connector for the terminal. Useful for debugging.
+
+It simply opens a REPL that lets you send "messages" to your bot.
+"""
 
 
 class Connector:
