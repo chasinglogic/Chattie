@@ -10,9 +10,17 @@ create a new bot using `chattie new my_bot_name` this will create a
 new directory with the bot name and generate a few files to help you
 get started!
 
+Chattie comes with 3 connectors at this time and I'm constantly trying
+to add more:
+
+- Matrix: https://matrix.org/
+- Telegram: https://telegram.org/
+- Terminal: A REPL you can use for testing your bot!
+
 From there you can start by adding [tricks](#tricks)
 and [handlers](#handlers) or just running the bot with the default
 connectors!
+
 
 ## Core Concepts
 
