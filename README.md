@@ -14,8 +14,11 @@ Chattie comes with 3 connectors at this time and I'm constantly trying
 to add more:
 
 - Matrix: https://matrix.org/
+  - `pip3 install chattie[matrix]`
 - Telegram: https://telegram.org/
+  - `pip3 install chattie[telegram]`
 - Terminal: A REPL you can use for testing your bot!
+
 
 From there you can start by adding [tricks](#tricks)
 and [handlers](#handlers) or just running the bot with the default
