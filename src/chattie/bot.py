@@ -98,10 +98,12 @@ class Bot:
             print("Parsed: ", split)
             # get the first word after our name as that will be the
             # command always.
-            try:
-                cmd_idx = split.index(self.name) + 1
-            except ValueError:
-                cmd_idx = split.index(self.name.lower()) + 1
+            cmd_idx = 1
+            for i, w in enumerate(split):
+                if w.lower().endswith(self.name.lower()):
+                    cmd_idx = i + 1
+                    break
+
             cmd = self.commands.get(split[cmd_idx])
             if cmd is None:
                 self.connector.send_message(room_id,

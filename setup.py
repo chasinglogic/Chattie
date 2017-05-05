@@ -27,6 +27,7 @@ setup(
     install_requires=[
         'python-telegram-bot',
         'requests',
+        'matrix_client',
         'click'
     ],
     entry_points={
@@ -37,8 +38,9 @@ setup(
             'default_tricks = chattie.tricks',
         ],
         'chattie.plugins.connectors': [
-            'telegram_connector = chattie.connectors.telegram',
-            'terminal_connector = chattie.connectors.term'
+            'telegram = chattie.connectors.telegram',
+            'terminal = chattie.connectors.term',
+            'matrix = chattie.connectors.matrix'
         ]
     },
     license='Apache2.0',
