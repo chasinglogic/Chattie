@@ -25,9 +25,7 @@ setup(
     author_email="mrobinson@praelatus.io",
     download_url='https://github.com/chasinglogic/Chattie',
     install_requires=[
-        'python-telegram-bot',
         'requests',
-        'matrix_client',
         'click'
     ],
     entry_points={

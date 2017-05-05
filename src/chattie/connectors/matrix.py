@@ -13,8 +13,14 @@ MATRIX_ROOMS -- a comma seperated list of rooms for the bot to join
 
 import os
 
-from matrix_client.client import MatrixRequestError
-from matrix_client.client import MatrixClient
+try:
+    from matrix_client.client import MatrixRequestError
+    from matrix_client.client import MatrixClient
+except ImportError:
+    import sys
+    print('You need to pip3 install matrix_client before '
+          'using this connector!')
+    sys.exit(1)
 
 MATRIX_URL = os.getenv("MATRIX_URL")
 MATRIX_USERNAME = os.getenv("MATRIX_USERNAME")

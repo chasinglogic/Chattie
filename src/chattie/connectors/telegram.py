@@ -7,8 +7,15 @@ your bot join rooms from here: https://core.telegram.org/bots
 
 import os
 
-from telegram.ext import Updater
-from telegram.ext import MessageHandler
+try:
+    from telegram.ext import Updater
+    from telegram.ext import MessageHandler
+except ImportError:
+    import sys
+    print('You need to pip3 install python-telegram-bot before '
+          'using this connector!')
+    sys.exit(1)
+
 
 
 class Connector:

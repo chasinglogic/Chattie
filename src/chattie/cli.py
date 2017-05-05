@@ -62,11 +62,15 @@ def new(bot_name):
 ######################################################################
                     Telegram Connector Config
 ######################################################################
+# Make sure you install python-telegram-bot first with
+# pip3 install python-telegram-bot
 # export TELEGRAM_API_TOKEN='your token here'
 
 ######################################################################
                     Matrix Connector Config
 ######################################################################
+# Make sure you install matrix_client first with
+# pip3 install matrix_client
 # export MATRIX_URL='https://matrix.org'
 # export MATRIX_USERNAME=%s
 # export MATRIX_PASSWORD='my_bots_password'
