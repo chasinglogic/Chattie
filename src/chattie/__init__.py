@@ -1,3 +1,3 @@
 """A bot framework for Python bots."""
 
-__version__ = 'v0.1.4'
+__version__ = 'v0.1.5'

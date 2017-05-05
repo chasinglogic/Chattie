@@ -28,9 +28,9 @@ setup(
         'requests',
         'click'
     ],
-    extras_requires={
-        'matrix': 'matrix_client',
-        'telegram': 'telegram'
+    extras_require={
+        'matrix': ['matrix_client'],
+        'telegram': ['telegram']
     },
     entry_points={
         'console_scripts': [
