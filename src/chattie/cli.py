@@ -3,6 +3,7 @@
 import click
 import os
 
+from inspect import getdoc
 from chattie.bot import Bot
 from chattie.tricks import helpcmd
 from chattie.plugins import get_connectors
@@ -21,6 +22,16 @@ def connectors():
     connectors = get_connectors()
     for c in connectors:
         print(c.name)
+
+
+@chattie.command()
+@click.argument('connector_name')
+def doc(connector_name):
+    """View the doc for the given connector."""
+    connectors = get_connectors()
+    for c in connectors:
+        if c.name == connector_name:
+            print(getdoc(c.load()))
 
 
 @chattie.command()
