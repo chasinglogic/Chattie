@@ -47,13 +47,23 @@ def new(bot_name):
 
     with open(os.path.join(bot_name, 'envfile'), 'w') as f:
         f.write("""export BOT_NAME=%s
-# Use this if you want to use Telegram
+
+######################################################################
+                    Telegram Connector Config
+######################################################################
 # export TELEGRAM_API_TOKEN='your token here'
-        """ % bot_name)
+
+######################################################################
+                    Matrix Connector Config
+######################################################################
+# export MATRIX_URL='https://matrix.org'
+# export MATRIX_USERNAME=%s
+# export MATRIX_PASSWORD='my_bots_password'
+# Comma seperated list of rooms to join
+# export MATRIX_ROOMS='#thorin-test:matrix.org'""" % bot_name)
 
     with open(os.path.join(bot_name, 'README'), 'w') as f:
-        f.write("""
-How to use your new bot!
+        f.write("""How to use your new bot!
 
 First you can write new commands or 'tricks' in the tricks folder and
 new handlers in the handlers folder. If that doesn't make sense to you
