@@ -200,8 +200,7 @@ Pull Request!
 ## Why the name Chattie?
 
 It's based on the movie Chappie, whose main character is a robot who
-gains emotions and befriends some humans. I've never seen the movie
-but I thought the pun was worthy.
+gains emotions and befriends some humans. I thought the pun was worthy.
 
 ### Contributing
 
