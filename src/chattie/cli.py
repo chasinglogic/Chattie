@@ -57,7 +57,7 @@ def new(bot_name):
         f.write("handlers = []")
 
     with open(os.path.join(bot_name, 'envfile'), 'w') as f:
-        f.write("""export BOT_NAME=%s
+        f.write("""export BOT_NAME={bot_name}
 
 ######################################################################
                     Telegram Connector Config
@@ -68,10 +68,10 @@ def new(bot_name):
                     Matrix Connector Config
 ######################################################################
 # export MATRIX_URL='https://matrix.org'
-# export MATRIX_USERNAME=%s
+# export MATRIX_USERNAME={bot_name}
 # export MATRIX_PASSWORD='my_bots_password'
 # Comma seperated list of rooms to join
-# export MATRIX_ROOMS='#thorin-test:matrix.org'""" % bot_name)
+# export MATRIX_ROOMS='#thorin-test:matrix.org'""".format(bot_name=bot_name))
 
     with open(os.path.join(bot_name, 'README'), 'w') as f:
         f.write("""How to use your new bot!
