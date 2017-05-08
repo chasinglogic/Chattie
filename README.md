@@ -10,9 +10,20 @@ create a new bot using `chattie new my_bot_name` this will create a
 new directory with the bot name and generate a few files to help you
 get started!
 
+Chattie comes with 3 connectors at this time and I'm constantly trying
+to add more:
+
+- Matrix: https://matrix.org/
+  - `pip3 install chattie[matrix]`
+- Telegram: https://telegram.org/
+  - `pip3 install chattie[telegram]`
+- Terminal: A REPL you can use for testing your bot!
+
+
 From there you can start by adding [tricks](#tricks)
 and [handlers](#handlers) or just running the bot with the default
 connectors!
+
 
 ## Core Concepts
 
@@ -189,8 +200,7 @@ Pull Request!
 ## Why the name Chattie?
 
 It's based on the movie Chappie, whose main character is a robot who
-gains emotions and befriends some humans. I've never seen the movie
-but I thought the pun was worthy.
+gains emotions and befriends some humans. I thought the pun was worthy.
 
 ### Contributing
 
