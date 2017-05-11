@@ -36,7 +36,7 @@ class Bot:
         print("Booting systems...")
         self.name = name
         print("Hello my name is " + name + "...")
-        self.connector = connector.Connector(self.parse_message)
+        self.connector = connector.Connector(self)
         if isfile("./inventory.json"):
             print("Loading my inventory from last time...")
             self.__load_inventory()
@@ -89,31 +89,16 @@ class Bot:
         with open("./inventory.json", "w") as inv:
             json.dump(self.inventory, inv)
 
-    def parse_message(self, room_id, msg):
-        """Turn the message into an array and calls the requested command."""
-        print("Message received...")
-        if self.name.lower() in msg.lower():
-            print("Someone is talking to me...")
-            split = msg.split(" ")
-            print("Parsed: ", split)
-            # get the first word after our name as that will be the
-            # command always.
-            cmd_idx = 1
-            for i, w in enumerate(split):
-                if w.lower().endswith(self.name.lower()):
-                    cmd_idx = i + 1
-                    break
+    def dispatch_command(self, command, split, user=None):
+        """Run command, return output of command."""
+        cmd = self.commands.get(command)
+        if cmd is None:
+            return 'I don\'t know that trick.'
+        return cmd(self, split, user=None)
 
-            cmd = self.commands.get(split[cmd_idx])
-            if cmd is None:
-                self.connector.send_message(room_id,
-                                            'I don\'t know that trick.')
-                return
-            reply = cmd(self, split)
-            self.connector.send_message(room_id, reply)
-            return
-        # If no command then pass to handlers
+    def dispatch_handlers(self, room_id, msg, user=None):
+        """Run handlers, sends any output using send_message."""
         for h in self.handlers:
             reply = h(self, msg)
-            if reply:
+            if reply and reply != '':
                 self.send_message(room_id, reply)

@@ -24,14 +24,14 @@ class Connector:
     # Holds the bots for all given rooms
     bots = {}
 
-    def __init__(self, parser):
+    def __init__(self, bot):
         """Will load the api token from $TELEGRAM_API_TOKEN."""
         token = os.getenv('TELEGRAM_API_TOKEN')
         if token is None:
             raise Exception('TELEGRAM_API_TOKEN not set')
         self.updater = Updater(token=token)
         self.dispatcher = self.updater.dispatcher
-        self.parser = parser
+        self.bot = bot
         self.dispatcher.add_handler(MessageHandler(None, self.parse_incoming))
 
     def listen(self):
@@ -46,4 +46,15 @@ class Connector:
     def parse_incoming(self, bot, incoming):
         """Transform incoming telegram info into format Chattie can parse."""
         self.bots[str(incoming.message.chat_id)] = bot
-        self.parser(incoming.message.chat_id, incoming.message.text)
+        split = incoming.message.text.split(' ')
+        response = None
+
+        if self.bot.name.lower() in split[0].lower():
+            response = self.bot.dispatch_command(split[1], split[1:])
+        elif split[0].starstwith('/'):
+            response = self.bot.dispatch_command(split[0][1:], split)
+        else:
+            self.bot.dispatch_handlers(incoming.message.chat_id,
+                                       incoming.message.text)
+        if response:
+            self.send_message(incoming.message.chat_id, response)
