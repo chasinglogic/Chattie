@@ -5,7 +5,7 @@ A Python bot framework inspired by Hubot.
 ## How do I make my own bot using this?
 
 First install chattie using `pip3 install chattie` you then will have
-access to the chattie cli which generates and runs bots. Next you can
+access to the chattie cli which generates and runs bots. Next, you can
 create a new bot using `chattie new my_bot_name` this will create a
 new directory with the bot name and generate a few files to help you
 get started!
@@ -45,22 +45,21 @@ incoming message as an array split on spaces. For example:
 def my_new_trick(bot, msg):
 	print(msg) # prints ['my_new_trick', 'some', 'stuff']
 	print(bot) # prints info about the currently running bot instance
-	return "" # responds to the chat room with whatever string is
-			  # returned here
+	return "" # responds to the chat room with whatever string is returned here
 ```
 
 Handlers follow the exact same signature however they can optionally
 return `None` which will send nothing back to the chat room. This is
 useful for things like audit logging or catching inside jokes!
 
-All tricks will automatically be added to Chattie's `help` command and
+All tricks will be automatically added to Chattie's `help` command and
 if the trick has a docstring it will be included in the help output
-prettified for the users viewing pleasure.
+prettified for the users' viewing pleasure.
 
-So Chattie can pick up your new tricks you have to assign them to
-commands, the way you do this is to have a global variable named
-`commands` in your module that is a dictionary of trigger words to
-tricks. For our example above it would look like this:
+So Chattie can pick up your new tricks, you have to assign them to
+commands. To do this you create a global variable named `commands` in
+your module that is a dictionary of trigger words to tricks. For our
+example above it would look like this:
 
 ```python
 commands = {
@@ -95,7 +94,7 @@ Chattie will take care of the rest!
 
 #### How do I add new tricks and handlers?
 
-There are two ways to write new tricks and handlers, if you think your
+There are two ways to write new tricks and handlers. If you think your
 tricks or handlers will be useful to a wider audience then you can
 either submit them as a PR to this repo **or** you can create a Python
 package using setuptools and entry_points. If you're unsure of what
