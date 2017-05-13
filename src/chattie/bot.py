@@ -13,7 +13,7 @@ class Bot:
 
     inventory = {}
 
-    def __init__(self, name, connector, command_pkgs, handlers=[]):
+    def __init__(self, name, command_pkgs, handlers=[]):
         """Initialize the bot.
 
         connector should be a module which contains a class named
@@ -36,7 +36,6 @@ class Bot:
         print("Booting systems...")
         self.name = name
         print("Hello my name is " + name + "...")
-        self.connector = connector.Connector(self)
         if isfile("./inventory.json"):
             print("Loading my inventory from last time...")
             self.__load_inventory()
@@ -58,11 +57,6 @@ class Bot:
         if exists('./handlers'):
             import handlers
             self.handlers += handlers.handlers
-
-    def run(self):
-        """Run the bot."""
-        print("I am listening for messages...")
-        self.connector.listen()
 
     def get(self, key):
         """Get key from the inventory."""
@@ -96,9 +90,21 @@ class Bot:
             return 'I don\'t know that trick.'
         return cmd(self, split, user=None)
 
-    def dispatch_handlers(self, room_id, msg, user=None):
+    def dispatch_handlers(self, msg, user=None):
         """Run handlers, sends any output using send_message."""
         for h in self.handlers:
-            reply = h(self, msg)
-            if reply and reply != '':
-                self.send_message(room_id, reply)
+            reply = h(self, msg, user)
+            yield reply
+
+    def current_user(self, room_id):
+        """Returns a user object, the structure of this object is differentf
+        for each connector.
+
+        There are other functions such as get_username that shield you
+        from supporting the different shapes this can take if the
+        connector supports it.
+        """
+        return self.users[room_id]
+
+    def set_current_user(self, room_id, user):
+        self.users[room_id] = user

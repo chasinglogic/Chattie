@@ -60,14 +60,14 @@ def new(bot_name):
         f.write("""export BOT_NAME={bot_name}
 
 ######################################################################
-#                   Telegram Connector Config                        #
+#                    Telegram Connector Config                       #
 ######################################################################
 # Make sure you install python-telegram-bot first with
 # pip3 install python-telegram-bot
 # export TELEGRAM_API_TOKEN='your token here'
 
 ######################################################################
-#                   Matrix Connector Config                          #
+#                     Matrix Connector Config                        #
 ######################################################################
 # Make sure you install matrix_client first with
 # pip3 install matrix_client
@@ -124,8 +124,9 @@ def run(name, connector):
 
     commands = get_commands()
     print('comm', commands)
-    bot = Bot(name, conn, commands)
-    bot.run()
+    bot = Bot(name, commands)
+    connector = conn.Connector(bot)
+    connector.listen()
 
 
 if __name__ == '__main__':

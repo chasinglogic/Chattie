@@ -1,8 +1,12 @@
 """The reference Connector class that defines the required interface."""
 
 
-class Connector:
-    """The base interface that must be implemented by a backend."""
+class BaseConnector:
+    """The base interface that must be implemented by a backend.
+
+    You can inherit from this class to get nice error messages for the
+    optional connector methods.
+    """
 
     def __init__(self, parser):
         """Parser is the parse_message function of the Bot class.
