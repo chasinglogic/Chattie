@@ -12,6 +12,7 @@ MATRIX_ROOMS -- a comma seperated list of rooms for the bot to join
 """
 
 import os
+import chattie.connector as connector
 
 try:
     from matrix_client.client import MatrixRequestError
@@ -28,12 +29,13 @@ MATRIX_PASSWORD = os.getenv("MATRIX_PASSWORD")
 MATRIX_ROOMS = os.getenv("MATRIX_ROOMS")
 
 
-class Connector:
+class Connector(connector.Connector):
     """A matrix connector for the Chattie bot framework."""
 
-    def __init__(self, parser):
+    def __init__(self, bot):
         """Connect to the matrix room."""
-        self.parser = parser
+        self.bot = bot
+
         self.client = MatrixClient(MATRIX_URL)
         # Try to register if it fails try to log in.
         try:
@@ -44,26 +46,23 @@ class Connector:
             self.token = self.client.\
                          login_with_password(username=MATRIX_USERNAME,
                                              password=MATRIX_PASSWORD)
-        self.rooms = {}
         for room in MATRIX_ROOMS.split(","):
             room_name = room
             if not room.startswith("#"):
                 room_name = "!" + room
             r = self.client.join_room(room_name)
             r.add_listener(self.parse_event)
-            self.rooms[r.room_id] = r
 
     def listen(self):
         """Listen for messages on Matrix."""
         self.client.listen_forever()
 
-    def send_message(self, room_id, msg):
-        """Send a message to Matrix."""
-        self.rooms[room_id].send_text(msg)
-
-    def parse_event(self, room, incoming_event):
+    def parse_event(self, room, event):
         """Transform Matrix incoming_event to text."""
-        if incoming_event['type'] != 'm.room.message':
+        if event['type'] != 'm.room.message':
             return
-        self.parser(incoming_event['room_id'],
-                    incoming_event['content']['body'])
+
+        resp = self.bot.parse_message(event['content']['body'])
+
+        for r in resp:
+            room.send_text(r)

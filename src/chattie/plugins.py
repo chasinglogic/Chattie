@@ -3,6 +3,12 @@
 import pkg_resources
 
 
+def get_inventories():
+    """Find all inventories available on the system."""
+    return [v for v in
+            pkg_resources.iter_entry_points('chattie.plugins.inventories')]
+
+
 def get_connectors():
     """Find all connectors available on the system."""
     return [v for v in

@@ -1,7 +1,7 @@
 """Example handlers for Chattie bot framework."""
 
 
-def counter(bot, msg):
+def counter(bot, msg, **kwargs):
     """Count the number of times count is said.
 
     Returns nothing so no message is sent back to the chat.
@@ -12,7 +12,7 @@ def counter(bot, msg):
         bot.set('count_count', count)
 
 
-def stealth_mountain(bot, msg):
+def stealth_mountain(bot, msg, **kwargs):
     """Imitate the @StealthMountain twitter bot."""
     if 'sneak peak' in msg.lower():
         return 'Did you mean sneak peek?'

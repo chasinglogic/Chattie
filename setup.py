@@ -43,6 +43,9 @@ setup(
             'telegram = chattie.connectors.telegram',
             'terminal = chattie.connectors.term',
             'matrix = chattie.connectors.matrix'
+        ],
+        'chattie.plugins.inventories': [
+            'json = chattie.inventory.json'
         ]
     },
     license='Apache2.0',

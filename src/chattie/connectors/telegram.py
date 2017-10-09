@@ -17,21 +17,19 @@ except ImportError:
     sys.exit(1)
 
 
-
 class Connector:
     """Connector class for the Telegram bot API."""
 
-    # Holds the bots for all given rooms
-    bots = {}
-
-    def __init__(self, parser):
+    def __init__(self, bot):
         """Will load the api token from $TELEGRAM_API_TOKEN."""
+        self.bot = bot
+
         token = os.getenv('TELEGRAM_API_TOKEN')
         if token is None:
             raise Exception('TELEGRAM_API_TOKEN not set')
+
         self.updater = Updater(token=token)
         self.dispatcher = self.updater.dispatcher
-        self.parser = parser
         self.dispatcher.add_handler(MessageHandler(None, self.parse_incoming))
 
     def listen(self):
@@ -39,11 +37,10 @@ class Connector:
         self.updater.start_polling()
         self.updater.idle()
 
-    def send_message(self, room_id, msg):
-        """Send a message to the given room_id."""
-        self.bots[str(room_id)].sendMessage(chat_id=room_id, text=msg)
-
     def parse_incoming(self, bot, incoming):
         """Transform incoming telegram info into format Chattie can parse."""
-        self.bots[str(incoming.message.chat_id)] = bot
-        self.parser(incoming.message.chat_id, incoming.message.text)
+        resp = self.bot.parse_message(incoming.message.text)
+
+        for r in resp:
+            bot.sendMessage(chat_id=incoming.message.chat_id,
+                            text=r)
