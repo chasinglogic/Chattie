@@ -132,6 +132,7 @@ commands = {
     'pick': pick,
     'the_rules': the_rules,
     'yoda': yoda,
+    'weather': weather,
     'hello': hello
 }
 
