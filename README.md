@@ -2,6 +2,24 @@
 
 A Python bot framework inspired by Hubot.
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Chattie](#chattie)
+    - [How do I make my own bot using this?](#how-do-i-make-my-own-bot-using-this)
+    - [Core Concepts](#core-concepts)
+        - [Tricks, Commands, and Handlers](#tricks-commands-and-handlers)
+            - [An Example Trick:](#an-example-trick)
+            - [How do I add new tricks and handlers?](#how-do-i-add-new-tricks-and-handlers)
+            - [Persistent storage for tricks and handlers](#persistent-storage-for-tricks-and-handlers)
+        - [Connectors](#connectors)
+    - [Why the name Chattie?](#why-the-name-chattie)
+        - [Contributing](#contributing)
+        - [License Info](#license-info)
+
+<!-- markdown-toc end -->
+
+
 ## How do I make my own bot using this?
 
 First install chattie using `pip3 install chattie` you then will have access to
@@ -34,9 +52,15 @@ Chattie has 4 core concepts around which it's built:
 
 ### Tricks, Commands, and Handlers
 
-Tricks and handlers are just functions which take two arguments, the
-current instance of the `chattie.Bot` class and the text of the
-incoming message as an array split on spaces. For example:
+Tricks and handlers are just functions which take two arguments and `**kwargs`,
+the current instance of the `chattie.Bot` class and the text of the
+incoming message as an array split on spaces. The `**kwargs` argument allows
+connectors to send additional meta data. It is not strictly necessary for
+functioning tricks or handlers but allows you to specialize your bot for your
+preferred backend. For more information on what extra metadata is available see
+the documentation for the appropriate Connector.
+
+#### An Example Trick:
 
 ```python
 # If we recieve the message: "chattie my_new_trick some stuff"

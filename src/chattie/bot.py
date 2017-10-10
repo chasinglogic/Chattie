@@ -76,7 +76,11 @@ class Bot:
             if cmd is None:
                 return ["I don't know that trick."]
 
-            return [cmd(self, split, **extras)]
+            resp = cmd(self, split, **extras)
+            if resp:
+                return [resp]
+
+            return []
 
         # If no command then pass to handlers
         for h in self.handlers:
