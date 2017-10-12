@@ -2,16 +2,34 @@
 
 A Python bot framework inspired by Hubot.
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Chattie](#chattie)
+    - [How do I make my own bot using this?](#how-do-i-make-my-own-bot-using-this)
+    - [Core Concepts](#core-concepts)
+        - [Tricks, Commands, and Handlers](#tricks-commands-and-handlers)
+            - [An Example Trick:](#an-example-trick)
+            - [How do I add new tricks and handlers?](#how-do-i-add-new-tricks-and-handlers)
+            - [Persistent storage for tricks and handlers](#persistent-storage-for-tricks-and-handlers)
+        - [Connectors](#connectors)
+    - [Why the name Chattie?](#why-the-name-chattie)
+        - [Contributing](#contributing)
+        - [License Info](#license-info)
+
+<!-- markdown-toc end -->
+
+
 ## How do I make my own bot using this?
 
-First install chattie using `pip3 install chattie` you then will have
-access to the chattie cli which generates and runs bots. Next you can
-create a new bot using `chattie new my_bot_name` this will create a
-new directory with the bot name and generate a few files to help you
-get started!
+First install chattie using `pip3 install chattie` you then will have access to
+the chattie cli which is used to generate and run bots.
 
-Chattie comes with 3 connectors at this time and I'm constantly trying
-to add more:
+To create a new bot run `chattie new my_bot_name`. This will make a new
+directory with the bot name and generate a few files to help you get started!
+
+Chattie comes with 3 connectors at this time and I'm constantly trying to add
+more:
 
 - Matrix: https://matrix.org/
   - `pip3 install chattie[matrix]`
@@ -20,10 +38,8 @@ to add more:
 - Terminal: A REPL you can use for testing your bot!
 
 
-From there you can start by adding [tricks](#tricks)
-and [handlers](#handlers) or just running the bot with the default
-connectors!
-
+From there you can start by adding [tricks](#tricks) and [handlers](#handlers)
+to build your own bot!
 
 ## Core Concepts
 
@@ -36,13 +52,19 @@ Chattie has 4 core concepts around which it's built:
 
 ### Tricks, Commands, and Handlers
 
-Tricks and handlers are just functions which take two arguments, the
-current instance of the `chattie.Bot` class and the text of the
-incoming message as an array split on spaces. For example:
+Tricks and handlers are just functions which take two arguments and `**kwargs`,
+the current instance of the `chattie.Bot` class and the text of the
+incoming message as an array split on spaces. The `**kwargs` argument allows
+connectors to send additional meta data. It is not strictly necessary for
+functioning tricks or handlers but allows you to specialize your bot for your
+preferred backend. For more information on what extra metadata is available see
+the documentation for the appropriate Connector.
+
+#### An Example Trick:
 
 ```python
 # If we recieve the message: "chattie my_new_trick some stuff"
-def my_new_trick(bot, msg):
+def my_new_trick(bot, msg, **kwargs):
 	print(msg) # prints ['my_new_trick', 'some', 'stuff']
 	print(bot) # prints info about the currently running bot instance
 	return "" # responds to the chat room with whatever string is
@@ -114,24 +136,23 @@ above Chattie will pick those up when that bot is running.
 
 #### Persistent storage for tricks and handlers
 
-The final concern you may have is how to maintain some state on your
-bot? For example registered rooms for a given handler, to make this
-simple Chattie maintains an internal dictionary called
-`inventory`. You can always access this directly if you so desire (as
-you are passed the bots instance as the first argument). But even
-better is to use the `get` and `set` methods provided by Chattie this
-will auto save the inventory on updates. Chattie also auto loads the
-inventory from disk on start. Make sure whatever you're storing is
-JSON serializable by the stdlib json module. An example of inventory
-usage would be this handler:
+The final concern you may have is how to maintain some state on your bot? For
+example registered rooms for a given handler, to make this simple Chattie has an
+"inventory". The inventory is an object that implements the `Inventory`
+interface. This simply is `get(key)` which returns the value at `key` and
+`set(key, value)` which sets `key` to `value`. The default inventory is a JSON
+file backed inventory so it should work anywhere you run Chattie. More complex
+Inventories are available if you have a need and as always using `entry_points`
+can write and package your own. An example of inventory usage would be this
+handler:
 
 ```python
-def arch_linux_counter(bot, msg):
+def arch_linux_counter(bot, msg, **kwargs):
 	text = ' '.join(msg)
 	if 'arch' in msg.lower() and 'linux' in msg.lower():
-		counter = bot.get('arch_linux_counter')
+		counter = bot.inventory.get('arch_linux_counter')
 		counter += 1
-		bot.set('arch_linux_counter', counter)
+		bot.inventory.set('arch_linux_counter', counter)
 		# Send a congratulatory message for extolling the virtues of
 		# the Arch Linux Master Race!
 		return "Congratulations on talking about Arch Linux! This is"
@@ -147,8 +168,8 @@ handlers = [
 ### Connectors
 
 The final concept used in Chattie is that of the Connector. A
-Connector is a class which implements an interface that allows Chattie
-to connect to a given backend. Often this is a chat service but can
+Connector is a class which implements the Connector interface that allows
+Chattie to connect to a given backend. Often this is a chat service but can
 also be any text stream such as stdin/stdout or even Twitter!
 
 The Connector class definition varies wildly based on the backend it's
@@ -156,29 +177,17 @@ connecting to but the interface it must implement is:
 
 ```python
 class Connector:
-	"""The base interface that must be implemented by a backend."""
+    """The base interface that must be implemented by a backend."""
 
-	def __init__(self, parser):
-		"""Parser is the parse_message function of the Bot class.
-
-		It should be passed the room_id (whatever form that takes) and
-		the plain text of the incoming message from the service.
-		"""
-		self.parser = parser
+	def __init__(self, bot):
+		"""Bot is an instance of the Bot class"""
+		self.bot = bot
 
 	def listen(self):
-		"""Should connect and listen to incoming messages from the backend.
+		"""Should connect and listen to incoming messages from the backend service.
 
-		When an incoming message is parsed should send to self.parser
-		(the Bot class' parse_message method)
-		"""
-		pass
-
-	def send_message(self, room_id, msg):
-		"""Send the msg to room_id.
-
-		msg is always a plain string and room_id is whatever is passed
-		to the Bot classes parse_message method as the room_id.
+		When an incoming message is parsed should send the text of the message
+        to self.bot.parse_message (the Bot class' parse_message method)
 		"""
 		pass
 ```

@@ -8,6 +8,7 @@ from chattie.bot import Bot
 from chattie.tricks import helpcmd
 from chattie.plugins import get_connectors
 from chattie.plugins import get_commands
+from chattie.plugins import get_inventories
 
 
 @click.group()
@@ -25,12 +26,30 @@ def connectors():
 
 
 @chattie.command()
+def inventories():
+    """Show all installed inventories."""
+    inventories = get_inventories()
+    for i in inventories:
+        print(i.name)
+
+
+@chattie.command()
 @click.argument('connector_name')
 def doc(connector_name):
     """View the doc for the given connector."""
     connectors = get_connectors()
     for c in connectors:
         if c.name == connector_name:
+            print(getdoc(c.load()))
+
+
+@chattie.command()
+@click.argument('inventory_name')
+def idoc(inventory_name):
+    """View the doc for the given inventory."""
+    inventories = get_inventories()
+    for c in inventories:
+        if c.name == inventory_name:
             print(getdoc(c.load()))
 
 
@@ -106,26 +125,45 @@ and you're good to go!
 
 @chattie.command()
 @click.option('--name',
-              default=os.getenv('BOT_NAME', 'Chattie'),
+              default=os.getenv('BOT_NAME', 'chattie'),
               help='The name of your bot.')
 @click.option('--connector',
               default='terminal_connector',
               help='Which connector to use, see "chattie connectors"')
-def run(name, connector):
+@click.option('--inventory',
+              default='json',
+              help='Which inventory to use, see "chattie inventories"')
+def run(name, connector, inventory):
     """Run the bot.
 
     By default will run with the first available connector.
     """
-    conn = None
-    available = get_connectors()
-    for c in available:
+    connectors = get_connectors()
+    if len(connectors) == 0:
+        print("ERROR: No available connectors!")
+        os.exit(1)
+
+    conn_pkg = connectors[0].load()
+    for c in connectors:
         if c.name == connector:
-            conn = c.load()
+            conn_pkg = c.load()
+
+    inventories = get_inventories()
+    if len(inventories) == 0:
+        print("ERROR: No available inventories!")
+        os.exit(1)
+
+    for i in inventories:
+        if i.name == inventory:
+            inventory_pkg = i.load()
 
     commands = get_commands()
     print('comm', commands)
-    bot = Bot(name, conn, commands)
-    bot.run()
+    inventory = inventory_pkg.Inventory()
+    bot = Bot(name, inventory, commands)
+    connector = conn_pkg.Connector(bot)
+    print("Listening for messages...")
+    connector.listen()
 
 
 if __name__ == '__main__':
