@@ -2,6 +2,7 @@
 
 import click
 import os
+import sys
 
 from inspect import getdoc
 from chattie.bot import Bot
@@ -9,6 +10,31 @@ from chattie.tricks import helpcmd
 from chattie.plugins import get_connectors
 from chattie.plugins import get_commands
 from chattie.plugins import get_inventories
+
+
+def load_commands():
+    """Load the commands for our bot.
+
+    A command package needs to have a global dict variable named
+    commands which contains a key for each command name and a
+    corresponding value which is the function to call for that
+    command. The command functions will be called with two
+    arguments the first being the current instance of the Bot
+    class the second will be an argv like array of the message.
+    """
+    commands = {}
+    for pkg in get_commands():
+        loaded = pkg.load()
+        commands.update(loaded.commands)
+
+    # Check if tricks exists and add it if so.
+    try:
+        import tricks
+        commands.update(tricks.commands)
+    except ImportError:
+        pass
+
+    return commands
 
 
 @click.group()
@@ -57,7 +83,7 @@ def idoc(inventory_name):
 def commands():
     """Show all installed commands."""
     import chattie.connectors.term as term
-    bot = Bot('Chattie', term, get_commands())
+    bot = Bot('Chattie', term, load_commands())
     print(helpcmd(bot, ''))
 
 
@@ -128,7 +154,7 @@ and you're good to go!
               default=os.getenv('BOT_NAME', 'chattie'),
               help='The name of your bot.')
 @click.option('--connector',
-              default='terminal_connector',
+              default='terminal',
               help='Which connector to use, see "chattie connectors"')
 @click.option('--inventory',
               default='json',
@@ -141,26 +167,42 @@ def run(name, connector, inventory):
     connectors = get_connectors()
     if len(connectors) == 0:
         print("ERROR: No available connectors!")
-        os.exit(1)
+        sys.exit(1)
 
-    conn_pkg = connectors[0].load()
+    conn_pkg = None
     for c in connectors:
         if c.name == connector:
             conn_pkg = c.load()
 
+    if conn_pkg is None:
+        print("ERROR: No valid connector given.")
+        sys.exit(1)
+
     inventories = get_inventories()
     if len(inventories) == 0:
         print("ERROR: No available inventories!")
-        os.exit(1)
+        sys.exit(1)
 
     for i in inventories:
         if i.name == inventory:
             inventory_pkg = i.load()
 
-    commands = get_commands()
-    print('comm', commands)
+    # Add current directory PYTHONPATH for dynamic imports.
+    sys.path.append(os.getcwd())
+
+    # Load commands from entry_points and local tricks
+    commands = load_commands()
+
+    handlers = []
+    # Look for local handlers
+    try:
+        import handlers
+        handlers += handlers.handlers
+    except ImportError:
+        pass
+
     inventory = inventory_pkg.Inventory()
-    bot = Bot(name, inventory, commands)
+    bot = Bot(name, inventory, commands, handlers)
     connector = conn_pkg.Connector(bot)
     print("Listening for messages...")
     connector.listen()
