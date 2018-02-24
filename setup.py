@@ -22,7 +22,7 @@ setup(
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     author="Mathew Robinson",
-    author_email="mrobinson@praelatus.io",
+    author_email="chasinglogic@gmail.com",
     download_url='https://github.com/chasinglogic/Chattie',
     install_requires=[
         'requests',
@@ -42,7 +42,6 @@ setup(
         'chattie.plugins.connectors': [
             'telegram = chattie.connectors.telegram',
             'terminal = chattie.connectors.term',
-            'matrix = chattie.connectors.matrix'
         ],
         'chattie.plugins.inventories': [
             'json = chattie.inventory.json'
