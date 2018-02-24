@@ -139,7 +139,7 @@ There is a new API for the Bot class as well as a new class to describe an incom
 ```python
 class Bot:
 
-    def __init__(self, name, inventory, command_pkgs, handlers=[]):
+    def __init__(self, name, inventory, commands={}, handlers=[]):
         # Setup the bot
         pass
     
