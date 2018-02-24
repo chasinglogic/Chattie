@@ -11,9 +11,20 @@ class Connector:
         """Set the bot."""
         self.bot = bot
 
+    def parse_command(self, msg):
+        if not msg.startswith('!'):
+            return None
+        command = ''
+        for char in msg[1:]:
+            if char == ' ':
+                break
+            command += char
+        return command
+
     def listen(self):
         """Listen for messages."""
-        print('Make sure to include your bot name in the message.'
+        print('Type messages to your bot. Commands start with ! (ex. !help).'
+              ' Handlers will be run if the message is not a command.'
               ' Type quit to exit.')
 
         while True:
@@ -21,6 +32,11 @@ class Connector:
             if msg == 'quit':
                 break
 
-            resp = self.bot.parse_message(msg)
-            for r in resp:
-                print(r)
+            command = self.parse_command(msg)
+            if command is not None:
+                response = self.bot.run_command(command, msg)
+                print(response)
+            else:
+                responses = self.bot.run_handlers(msg)
+                for response in responses:
+                    print(response)
