@@ -139,9 +139,11 @@ There is a new API for the Bot class as well as a new class to describe an incom
 ```python
 class Event:
 
-    def __init__(self, message, sending_user=None):
+    def __init__(self, message, mention_symbol='', sending_user=None, mentioned=False):
         self.message = message
+        self.mention_symbol = mention_symbol
         self.sending_user = sending_user
+        self.mentioned = mentioned
 
 
 class Bot:
@@ -154,7 +156,7 @@ class Bot:
         return True || False
 
     def run_command(self, command, event):
-        return result_of_command_as_string
+        return Event(msg="message to send", )
 
     def run_handlers(self, event):
         return [all_results_of_handlers_as_list_of_strings]
