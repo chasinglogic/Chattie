@@ -23,6 +23,8 @@ class Connector:
     def __init__(self, bot):
         """Will load the api token from $TELEGRAM_API_TOKEN."""
         self.bot = bot
+        self.identifier = '@' + bot.name
+        self.ident_len = len(self.identifier)
 
         token = os.getenv('TELEGRAM_API_TOKEN')
         if token is None:
@@ -37,10 +39,27 @@ class Connector:
         self.updater.start_polling()
         self.updater.idle()
 
-    def parse_incoming(self, bot, incoming):
+    def parse_incoming(self, telegram_bot, incoming):
         """Transform incoming telegram info into format Chattie can parse."""
-        resp = self.bot.parse_message(incoming.message.text)
+        if incoming.message is None:
+            return
 
-        for r in resp:
-            bot.sendMessage(chat_id=incoming.message.chat_id,
-                            text=r)
+        msg = incoming.message.text
+        if msg[:len(self.ident_len)] == self.identifier:
+            cmd = msg.split(' ')
+            if len(cmd) <= 1:
+                return
+            resp = self.bot.run_command(cmd, msg,
+                                        update=incoming,
+                                        telegram_bot=telegram_bot)
+            telegram_bot.sendMessage(
+                chat_id=incoming.message.chat_id, text=resp)
+            return
+
+        responses = self.bot.run_handlers(msg,
+                                          update=incoming, telegram_bot=telegram_bot)
+        for response in responses:
+            telegram_bot.sendMessage(
+                chat_id=incoming.message.chat_id,
+                text=response
+            )
