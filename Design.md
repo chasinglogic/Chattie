@@ -137,15 +137,6 @@ class Bot:
 There is a new API for the Bot class as well as a new class to describe an incoming Event from a connector. The connector will be responsible for turning an incoming message into an Event object.
 
 ```python
-class Event:
-
-    def __init__(self, message, mention_symbol='', sending_user=None, mentioned=False):
-        self.message = message
-        self.mention_symbol = mention_symbol
-        self.sending_user = sending_user
-        self.mentioned = mentioned
-
-
 class Bot:
 
     def __init__(self, name, inventory, command_pkgs, handlers=[]):
@@ -155,10 +146,10 @@ class Bot:
     def has_command(self, command):
         return True || False
 
-    def run_command(self, command, event):
-        return Event(msg="message to send", )
+    def run_command(self, command, **kwargs):
+        return string_of_message_to_send
 
-    def run_handlers(self, event):
+    def run_handlers(self, event, **kwargs):
         return [all_results_of_handlers_as_list_of_strings]
 ```
 
