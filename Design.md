@@ -134,7 +134,7 @@ class Bot:
         return self.inventory.set(key, value)
 ```
 
-There is a new API for the Bot class as well as a new class to describe an incoming Event from a connector. The connector will be responsible for turning an incoming message into an Event object.
+There is a new API for the Bot class.
 
 ```python
 class Bot:
