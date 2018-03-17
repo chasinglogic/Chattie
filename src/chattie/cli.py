@@ -128,7 +128,7 @@ and you're good to go!
               default=os.getenv('BOT_NAME', 'chattie'),
               help='The name of your bot.')
 @click.option('--connector',
-              default='terminal_connector',
+              default='terminal',
               help='Which connector to use, see "chattie connectors"')
 @click.option('--inventory',
               default='json',
@@ -143,10 +143,13 @@ def run(name, connector, inventory):
         print("ERROR: No available connectors!")
         os.exit(1)
 
-    conn_pkg = connectors[0].load()
+    conn_pkg = None
     for c in connectors:
         if c.name == connector:
             conn_pkg = c.load()
+
+    if conn_pkg is None:
+        conn_pkg = connectors[0].load()
 
     inventories = get_inventories()
     if len(inventories) == 0:
@@ -158,7 +161,6 @@ def run(name, connector, inventory):
             inventory_pkg = i.load()
 
     commands = get_commands()
-    print('comm', commands)
     inventory = inventory_pkg.Inventory()
     bot = Bot(name, inventory, commands)
     connector = conn_pkg.Connector(bot)

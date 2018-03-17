@@ -12,7 +12,7 @@ MATRIX_ROOMS -- a comma seperated list of rooms for the bot to join
 """
 
 import os
-import chattie.connector as connector
+import chattie.connectors as connectors
 
 try:
     from matrix_client.client import MatrixRequestError
@@ -29,7 +29,7 @@ MATRIX_PASSWORD = os.getenv("MATRIX_PASSWORD")
 MATRIX_ROOMS = os.getenv("MATRIX_ROOMS")
 
 
-class Connector(connector.Connector):
+class Connector(connectors.Connector):
     """A matrix connector for the Chattie bot framework."""
 
     def __init__(self, bot):
