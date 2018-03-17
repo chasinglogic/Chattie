@@ -28,6 +28,21 @@ MATRIX_USERNAME = os.getenv("MATRIX_USERNAME")
 MATRIX_PASSWORD = os.getenv("MATRIX_PASSWORD")
 MATRIX_ROOMS = os.getenv("MATRIX_ROOMS")
 
+if None in [MATRIX_URL, MATRIX_USERNAME, MATRIX_PASSWORD, MATRIX_ROOMS]:
+    print('You must set MATRIX_URL, MATRIX_USERNAME, MATRIX_PASSWORD, and '
+          'MATRIX_ROOMS environment variables to use this connector.')
+    print('Missing variables:',
+          [missing[0] for missing in
+           [
+               ('MATRIX_URL', MATRIX_URL),
+               ('MATRIX_USERNAME', MATRIX_USERNAME),
+               ('MATRIX_PASSWORD', MATRIX_PASSWORD),
+               ('MATRIX_ROOMS', MATRIX_ROOMS)
+           ]
+           if missing[1] is None])
+    import sys
+    sys.exit(1)
+
 
 class Connector(connectors.Connector):
     """A matrix connector for the Chattie bot framework."""
