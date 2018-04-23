@@ -8,6 +8,8 @@ from chattie.bot import Bot
 from chattie.tricks import helpcmd
 from chattie.plugins import get_connectors
 from chattie.plugins import get_commands
+from chattie.inventory.file import FileInventory
+from chattie.connectors.term import Connector as TerminalConnector
 
 
 @click.group()
@@ -108,10 +110,12 @@ and you're good to go!
 @click.option('--name',
               default=os.getenv('BOT_NAME', 'Chattie'),
               help='The name of your bot.')
+@click.option('--inventory', default='file',
+              help='Which inventory to use. Default: file')
 @click.option('--connector',
               default='terminal_connector',
               help='Which connector to use, see "chattie connectors"')
-def run(name, connector):
+def run(name, inventory, connector):
     """Run the bot.
 
     By default will run with the first available connector.
@@ -123,9 +127,11 @@ def run(name, connector):
             conn = c.load()
 
     commands = get_commands()
-    print('comm', commands)
-    bot = Bot(name, commands)
-    connector = conn.Connector(bot)
+    bot = Bot(name, FileInventory(), commands)
+    if conn is None:
+        connector = TerminalConnector(bot)
+    else:
+        connector = conn.Connector(bot)
     connector.listen()
 
 
