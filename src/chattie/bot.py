@@ -13,9 +13,8 @@ class Bot:
 
     inventory = {}
 
-    def __init__(self, name, command_pkgs, handlers=[]):
+    def __init__(self, name, inventory, command_pkgs, handlers=None):
         """Initialize the bot.
-
         connector should be a module which contains a class named
         Connector that follows the appropriate interface. See
         chattie.connectors for examples.
@@ -35,11 +34,9 @@ class Bot:
         """
         print("Booting systems...")
         self.name = name
+        self.inventory = inventory
         print("Hello my name is " + name + "...")
-        if isfile("./inventory.json"):
-            print("Loading my inventory from last time...")
-            self.__load_inventory()
-        self.handlers = handlers
+        self.handlers = handlers if handlers else []
         self.commands = {}
         for pkg in command_pkgs:
             loaded = pkg.load()
@@ -58,53 +55,20 @@ class Bot:
             import handlers
             self.handlers += handlers.handlers
 
-    def get(self, key):
-        """Get key from the inventory."""
-        return self.inventory[key]
+    def knows_command(self, command):
+        return command in self.commands
 
-    def set(self, key, value):
-        """Save value in the inventory at key."""
-        self.inventory[key] = value
-        self.__save_inventory()
-
-    def __load_inventory(self):
-        """Load the inventory file from the filesystem.
-
-        Potentially destructive function so we attempt to privatize it.
-        """
-        with open("./inventory.json", "r") as inv:
-            self.inventory = json.load(inv)
-
-    def __save_inventory(self):
-        """Save the inventory to the file system.
-
-        Potentially destructive function so we attempt to privatize it.
-        """
-        with open("./inventory.json", "w") as inv:
-            json.dump(self.inventory, inv)
-
-    def dispatch_command(self, command, split, user=None):
+    def run_command(self, command, msg, user=None):
         """Run command, return output of command."""
         cmd = self.commands.get(command)
         if cmd is None:
             return 'I don\'t know that trick.'
-        return cmd(self, split, user=None)
+        return cmd(self, msg, user=None)
 
-    def dispatch_handlers(self, msg, user=None):
+    def run_handlers(self, msg, user=None):
         """Run handlers, sends any output using send_message."""
         for h in self.handlers:
             reply = h(self, msg, user)
+            if reply is None:
+                continue
             yield reply
-
-    def current_user(self, room_id):
-        """Returns a user object, the structure of this object is differentf
-        for each connector.
-
-        There are other functions such as get_username that shield you
-        from supporting the different shapes this can take if the
-        connector supports it.
-        """
-        return self.users[room_id]
-
-    def set_current_user(self, room_id, user):
-        self.users[room_id] = user

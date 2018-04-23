@@ -8,26 +8,18 @@ class BaseConnector:
     optional connector methods.
     """
 
-    def __init__(self, parser):
-        """Parser is the parse_message function of the Bot class.
+    def __init__(self, bot):
+        """Bot is a fully initiailzed bot instance.
 
-        It should be passed the room_id (whatever form that takes) and
-        the plain text of the incoming message from the service.
+        The connector is in charge of determining whether a command
+        was asked for or whether handlers should be run instead.
+        Once determined either the handlers can be run using the
+        generator function bot.run_handlers or the method
+        bot.run_command as appropriate. The return value will be a
+        string to send back as a reply.
         """
-        self.parser = parser
+        self.bot = bot
 
     def listen(self):
-        """Should connect and listen to incoming messages from the backend.
-
-        When an incoming message is parsed should send to self.parser
-        (the Bot class' parse_message method)
-        """
-        pass
-
-    def send_message(self, room_id, msg):
-        """Send the msg to room_id.
-
-        msg is always a plain string and room_id is whatever is passed
-        to the Bot classes parse_message method as the room_id.
-        """
-        pass
+        """Should connect and listen to incoming messages from the backend."""
+        raise NotImplemented
