@@ -7,7 +7,7 @@ from os import getenv
 from inspect import getdoc
 
 
-def helpcmd(bot, inc_msg):
+def helpcmd(bot, incoming, user=None):
     """Show the available commands and documentation."""
     try:
         msg = """
@@ -26,13 +26,14 @@ I know the following commands:
         return 'Sorry, I don\'t know any commands'
 
 
-def pick(bot, inc_msg):
+def pick(bot, incoming, user=None):
     """Choose a random item from a list of things."""
-    choices = inc_msg[inc_msg.index("pick") + 1:]
+    split = incoming.split(' ')
+    choices = split[split.index("pick") + 1:]
     return choices[random.randrange(0, len(choices))]
 
 
-def the_rules(bot, incoming):
+def the_rules(bot, incoming, user=None):
     """Print THE RULES."""
     return """The rules are:
     1. A robot may not injure a human being or, through
@@ -43,9 +44,10 @@ def the_rules(bot, incoming):
        protection does not conflict with the First or Second Law."""
 
 
-def yoda(bot, inc_msg):
+def yoda(bot, incoming, user=None):
     """Attempt to translate the given message into yoda-speak."""
-    msg = ' '.join(inc_msg[inc_msg.index('yoda') + 1:])
+    split = incoming.split(' ')
+    msg = ' '.join(split[split.index('yoda') + 1:])
     url = "http://api.funtranslations.com/translate/yoda.json?text=" + msg
     r = requests.get(url)
     if r.status_code == 429:
@@ -57,7 +59,7 @@ def yoda(bot, inc_msg):
         return "An unexpected error occured"
 
 
-def hello(bot, incoming):
+def hello(bot, incoming, user=None):
     """A simple ping style command for testing connectivity."""
     return "Wazzup"
 
@@ -66,10 +68,10 @@ JENKINS_URL = getenv("JENKINS_URL")
 JENKINS_API_KEY = getenv("JENKINS_TOKEN")
 
 
-def build(bot, inc_msg):
+def build(bot, incoming, user=None):
     """Run the given build in Jenkins."""
     r = requests.post(JENKINS_URL + "/job/" +
-                      ' '.join(inc_msg[inc_msg.index("build") + 1:]) +
+                      ' '.join(incoming[incoming.index("build") + 1:]) +
                       "/build?token=" + JENKINS_API_KEY)
     if r.status_code > 300:
         print("Error with the request:", r.text)
@@ -119,9 +121,10 @@ def _get_weather_zip(zipcode):
     return _format_resp(r.json())
 
 
-def weather(chattie, incoming):
+def weather(chattie, incoming, user=None):
     """Get the weather for a given city name or zip code."""
-    city_or_zip = str(incoming[incoming.index("weather"):])
+    split = incoming.split(' ')
+    city_or_zip = str(split[split.index("weather"):])
     if _is_zip_code(city_or_zip):
         return _get_weather_zip(city_or_zip)
     return _get_weather_name(city_or_zip)
