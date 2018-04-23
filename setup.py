@@ -30,7 +30,8 @@ setup(
     ],
     extras_require={
         'matrix': ['matrix_client'],
-        'telegram': ['telegram']
+        'telegram': ['telegram'],
+        'slack': ['slackclient']
     },
     entry_points={
         'console_scripts': [
