@@ -12,6 +12,7 @@ MATRIX_ROOMS -- a comma seperated list of rooms for the bot to join
 """
 
 import os
+from chattie.connector import BaseConnector
 
 try:
     from matrix_client.client import MatrixRequestError
@@ -28,12 +29,12 @@ MATRIX_PASSWORD = os.getenv("MATRIX_PASSWORD")
 MATRIX_ROOMS = os.getenv("MATRIX_ROOMS")
 
 
-class Connector:
+class Connector(BaseConnector):
     """A matrix connector for the Chattie bot framework."""
 
-    def __init__(self, parser):
+    def __init__(self, bot):
         """Connect to the matrix room."""
-        self.parser = parser
+        self.bot = bot
         self.client = MatrixClient(MATRIX_URL)
         # Try to register if it fails try to log in.
         try:
@@ -65,5 +66,12 @@ class Connector:
         """Transform Matrix incoming_event to text."""
         if incoming_event['type'] != 'm.room.message':
             return
-        self.parser(incoming_event['room_id'],
-                    incoming_event['content']['body'])
+
+        message = incoming_event['content']['body']
+        if message.startswith('@' + self.bot.name):
+            command = message.split(' ')[1]
+            reply = self.bot.run_command(command, message)
+            self.send_message(incoming_event['room_id'], reply)
+        else:
+            for reply in self.bot.run_handlers(message):
+                self.send_message(incoming_event['room_id'], reply)

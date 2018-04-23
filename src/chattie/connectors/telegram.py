@@ -13,8 +13,8 @@ try:
     from telegram.ext import CommandHandler
 except ImportError:
     import sys
-    print('You need to pip3 install python-telegram-bot before '
-          'using this connector!')
+    print('You need to run pip3 install python-telegram-bot '
+          'before using this connector!')
     sys.exit(1)
 
 from chattie.connectors import BaseConnector
@@ -23,9 +23,6 @@ from chattie.user import User
 
 class Connector(BaseConnector):
     """Connector class for the Telegram bot API."""
-
-    # Holds the bots for all given rooms
-    bots = {}
 
     def __init__(self, bot):
         """Will load the api token from $TELEGRAM_API_TOKEN."""
@@ -50,21 +47,13 @@ class Connector(BaseConnector):
         self.updater.start_polling()
         self.updater.idle()
 
-    def send_message(self, room_id, msg):
-        """Send a message to the given room_id."""
-        self.bots[room_id].sendMessage(chat_id=room_id, text=msg)
-
-    def get_username(self, update_user):
-        """Return the username of a telegram user class."""
-        return update_user.username
-
     def parse_command(self, trick):
         """Turns chattie commands into telegram CommandHandlers."""
         def tele_command(bot, update):
             response = trick(
                 self.bot,
-                update.message.text.split(' '),
-                self.to_chattie_user(update.effective_user)
+                update.message.text,
+                Connector.to_chattie_user(update.effective_user)
             )
 
             bot.sendMessage(
@@ -77,9 +66,7 @@ class Connector(BaseConnector):
     def parse_messages(self, bot, incoming):
         """Transform incoming telegram info into format Chattie can parse."""
         for reply in self.bot.dispatch_handlers(incoming.message.text):
-            if reply:
-                bot.sendMessage(chat_id=incoming.message.chat_id,
-                                text=incoming.message.text)
+            bot.sendMessage(chat_id=incoming.message.chat_id, text=reply)
 
     @staticmethod
     def to_chattie_user(tele_user):
